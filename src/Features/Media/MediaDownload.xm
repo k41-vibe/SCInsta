@@ -1,9 +1,35 @@
 #import "../../InstagramHeaders.h"
 #import "../../Utils.h"
 #import "../../Downloader/Download.h"
+#import <objc/message.h>
 
 static SCIDownloadDelegate *imageDownloadDelegate;
 static SCIDownloadDelegate *videoDownloadDelegate;
+
+// Pull the media object off a cell without assuming which accessor this build of
+// Instagram kept. Reading a property that has since been removed does not return nil, it
+// throws -- so every name is checked first.
+static id SCIMediaFromCell(id cell) {
+    static NSArray<NSString *> *names = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        names = @[@"video", @"media", @"item", @"currentMedia", @"mediaCellFeedItem", @"feedItem"];
+    });
+
+    for (NSString *name in names) {
+        SEL selector = NSSelectorFromString(name);
+        if (![cell respondsToSelector:selector]) continue;
+
+        id value = ((id (*)(id, SEL))objc_msgSend)(cell, selector);
+        if (value) {
+            NSLog(@"[SCInsta] media from -%@ on %@", name, NSStringFromClass([cell class]));
+            return value;
+        }
+    }
+
+    NSLog(@"[SCInsta] no media accessor on %@", NSStringFromClass([cell class]));
+    return nil;
+}
 
 static void initDownloaders () {
     // Init downloaders only once
@@ -92,7 +118,7 @@ static void initDownloaders () {
 %new - (void)handleLongPress:(UILongPressGestureRecognizer *)sender {
     if (sender.state != UIGestureRecognizerStateBegan) return;
 
-    NSURL *videoUrl = [SCIUtils getVideoUrlForMedia:[self mediaCellFeedItem]];
+    NSURL *videoUrl = [SCIUtils getVideoUrlForMedia:SCIMediaFromCell(self)];
     if (!videoUrl) {
         [SCIUtils showErrorHUDWithDescription:@"Could not extract video url from post"];
 
@@ -172,8 +198,17 @@ static void initDownloaders () {
 }
 %new - (void)handleLongPress:(UILongPressGestureRecognizer *)sender {
     if (sender.state != UIGestureRecognizerStateBegan) return;
-    
-    NSURL *videoUrl = [SCIUtils getVideoUrlForMedia:self.video];
+
+    // Instagram keeps moving the media off this cell: on recent builds it has no -video
+    // at all, and reading it outright killed the app with "unrecognized selector sent to
+    // instance". Ask before calling, and accept any of the names it has carried.
+    id media = SCIMediaFromCell(self);
+    if (!media) {
+        [SCIUtils showErrorHUDWithDescription:@"この画面からは動画を取り出せませんでした"];
+        return;
+    }
+
+    NSURL *videoUrl = [SCIUtils getVideoUrlForMedia:media];
     if (!videoUrl) {
         [SCIUtils showErrorHUDWithDescription:@"Could not extract video url from reel"];
 
@@ -214,7 +249,7 @@ static void initDownloaders () {
 %new - (void)handleLongPress:(UILongPressGestureRecognizer *)sender {
     if (sender.state != UIGestureRecognizerStateBegan) return;
 
-    NSURL *photoUrl = [SCIUtils getPhotoUrlForMedia:[self item]];
+    NSURL *photoUrl = [SCIUtils getPhotoUrlForMedia:SCIMediaFromCell(self)];
     if (!photoUrl) {
         [SCIUtils showErrorHUDWithDescription:@"Could not extract photo url from story"];
         
@@ -252,8 +287,8 @@ static void initDownloaders () {
 %new - (void)handleLongPress:(UILongPressGestureRecognizer *)sender {
     if (sender.state != UIGestureRecognizerStateBegan) return;
 
-    NSURL *videoUrl = [SCIUtils getVideoUrlForMedia:self.item];
-    
+    NSURL *videoUrl = [SCIUtils getVideoUrlForMedia:SCIMediaFromCell(self)];
+
     if (!videoUrl) {
         [SCIUtils showErrorHUDWithDescription:@"Could not extract video url from story"];
 
