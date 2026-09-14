@@ -1,4 +1,5 @@
 #import "../../InstagramHeaders.h"
+#import "../../Utils.h"
 
 // A way to find out what a popup actually is.
 //
