@@ -18,175 +18,175 @@
         @{
             @"header": @"",
             @"rows": @[
-                [SCISetting linkCellWithTitle:@"Donate" subtitle:@"Consider donating to support this tweak's development!" icon:[SCISymbol symbolWithName:@"heart.circle.fill" color:[UIColor systemPinkColor] size:20.0] url:@"https://ko-fi.com/SoCuul"]
+                [SCISetting linkCellWithTitle:@"開発者を支援する" subtitle:@"この tweak の開発を支えたい方はこちらから" icon:[SCISymbol symbolWithName:@"heart.circle.fill" color:[UIColor systemPinkColor] size:20.0] url:@"https://ko-fi.com/SoCuul"]
             ]
         },
         @{
             @"header": @"",
             @"rows": @[
-                [SCISetting navigationCellWithTitle:@"General"
+                [SCISetting navigationCellWithTitle:@"全般"
                                            subtitle:@""
                                                icon:[SCISymbol symbolWithName:@"gear"]
                                         navSections:@[@{
                                             @"header": @"",
                                             @"rows": @[
-                                                [SCISetting switchCellWithTitle:@"Hide ads" subtitle:@"Removes all ads from the Instagram app" defaultsKey:@"hide_ads"],
-                                                [SCISetting switchCellWithTitle:@"Hide Meta AI" subtitle:@"Hides the meta ai buttons/functionality within the app" defaultsKey:@"hide_meta_ai"],
-                                                [SCISetting switchCellWithTitle:@"Copy description" subtitle:@"Copy description text fields by long-pressing on them" defaultsKey:@"copy_description"],
-                                                [SCISetting switchCellWithTitle:@"Do not save recent searches" subtitle:@"Search bars will no longer save your recent searches" defaultsKey:@"no_recent_searches"],
-                                                [SCISetting switchCellWithTitle:@"Use detailed color picker" subtitle:@"Long press on the eyedropper tool in stories to customize the text color more precisely" defaultsKey:@"detailed_color_picker"],
-                                                [SCISetting switchCellWithTitle:@"Enable liquid glass buttons" subtitle:@"Enables experimental liquid glass buttons within the app" defaultsKey:@"liquid_glass_buttons" requiresRestart:YES],
-                                                [SCISetting switchCellWithTitle:@"Enable liquid glass surfaces" subtitle:@"Enables liquid glass for other elements, such as menus" defaultsKey:@"liquid_glass_surfaces" requiresRestart:YES],
-                                                [SCISetting switchCellWithTitle:@"Enable teen app icons" subtitle:@"When enabled, hold down on the Instagram logo to change the app icon" defaultsKey:@"teen_app_icons" requiresRestart:YES]
+                                                [SCISetting switchCellWithTitle:@"広告を隠す" subtitle:@"アプリ内の広告をすべて取り除きます" defaultsKey:@"hide_ads"],
+                                                [SCISetting switchCellWithTitle:@"Meta AI を隠す" subtitle:@"アプリ内の Meta AI のボタンと機能を隠します" defaultsKey:@"hide_meta_ai"],
+                                                [SCISetting switchCellWithTitle:@"説明文をコピー" subtitle:@"説明文を長押しするとコピーできます" defaultsKey:@"copy_description"],
+                                                [SCISetting switchCellWithTitle:@"検索履歴を残さない" subtitle:@"検索欄が最近の検索を保存しなくなります" defaultsKey:@"no_recent_searches"],
+                                                [SCISetting switchCellWithTitle:@"詳細なカラーピッカー" subtitle:@"ストーリーのスポイトを長押しすると、文字色をより細かく選べます" defaultsKey:@"detailed_color_picker"],
+                                                [SCISetting switchCellWithTitle:@"リキッドグラスのボタン" subtitle:@"アプリ内のボタンを実験的なリキッドグラス表示にします" defaultsKey:@"liquid_glass_buttons" requiresRestart:YES],
+                                                [SCISetting switchCellWithTitle:@"リキッドグラスの面" subtitle:@"メニューなど、他の要素もリキッドグラス表示にします" defaultsKey:@"liquid_glass_surfaces" requiresRestart:YES],
+                                                [SCISetting switchCellWithTitle:@"ティーン向けアイコンを使う" subtitle:@"有効にすると、Instagram のロゴを長押ししてアプリのアイコンを変えられます" defaultsKey:@"teen_app_icons" requiresRestart:YES]
                                             ]
                                         },
                                         @{
-                                            @"header": @"Notes",
+                                            @"header": @"ノート",
                                             @"rows": @[
-                                                [SCISetting switchCellWithTitle:@"Hide notes tray" subtitle:@"Hides the notes tray in the dm inbox" defaultsKey:@"hide_notes_tray"],
-                                                [SCISetting switchCellWithTitle:@"Hide friends map" subtitle:@"Hides the friends map icon in the notes tray" defaultsKey:@"hide_friends_map"],
-                                                [SCISetting switchCellWithTitle:@"Enable note theming" subtitle:@"Enables the ability to use the notes theme picker" defaultsKey:@"enable_notes_customization"],
-                                                [SCISetting switchCellWithTitle:@"Custom note themes" subtitle:@"Provides an option to set custom emojis and background/text colors" defaultsKey:@"custom_note_themes"],
+                                                [SCISetting switchCellWithTitle:@"ノート欄を隠す" subtitle:@"DM 一覧の上にあるノート欄を隠します" defaultsKey:@"hide_notes_tray"],
+                                                [SCISetting switchCellWithTitle:@"友達マップを隠す" subtitle:@"ノート欄にある友達マップのアイコンを隠します" defaultsKey:@"hide_friends_map"],
+                                                [SCISetting switchCellWithTitle:@"ノートのテーマを使う" subtitle:@"ノートのテーマ選択を使えるようにします" defaultsKey:@"enable_notes_customization"],
+                                                [SCISetting switchCellWithTitle:@"ノートのテーマを自作" subtitle:@"絵文字と背景色・文字色を自分で決められます" defaultsKey:@"custom_note_themes"],
                                             ]
                                         },
                                         @{
-                                            @"header": @"Focus/distractions",
+                                            @"header": @"集中(気の散るもの)",
                                             @"rows": @[
-                                                [SCISetting switchCellWithTitle:@"No suggested users" subtitle:@"Hides all suggested users for you to follow, outside your feed" defaultsKey:@"no_suggested_users"],
-                                                [SCISetting switchCellWithTitle:@"No suggested chats" subtitle:@"Hides the suggested broadcast channels in direct messages" defaultsKey:@"no_suggested_chats"],
-                                                [SCISetting switchCellWithTitle:@"Hide explore posts grid" subtitle:@"Hides the grid of suggested posts on the explore/search tab" defaultsKey:@"hide_explore_grid"],
-                                                [SCISetting switchCellWithTitle:@"Hide trending searches" subtitle:@"Hides the trending searches under the explore search bar" defaultsKey:@"hide_trending_searches"],
+                                                [SCISetting switchCellWithTitle:@"おすすめユーザーを消す" subtitle:@"フィードの外にある「おすすめのユーザー」をすべて隠します" defaultsKey:@"no_suggested_users"],
+                                                [SCISetting switchCellWithTitle:@"おすすめチャットを消す" subtitle:@"DM のおすすめチャンネルを隠します" defaultsKey:@"no_suggested_chats"],
+                                                [SCISetting switchCellWithTitle:@"発見タブの投稿一覧を隠す" subtitle:@"発見(検索)タブに並ぶおすすめ投稿の格子を隠します" defaultsKey:@"hide_explore_grid"],
+                                                [SCISetting switchCellWithTitle:@"話題の検索を隠す" subtitle:@"検索欄の下に出る「話題の検索」を隠します" defaultsKey:@"hide_trending_searches"],
                                             ]
                                         }]
                 ],
-                [SCISetting navigationCellWithTitle:@"Feed"
+                [SCISetting navigationCellWithTitle:@"フィード"
                                            subtitle:@""
                                                icon:[SCISymbol symbolWithName:@"rectangle.stack"]
                                         navSections:@[@{
                                             @"header": @"",
                                             @"rows": @[
-                                                [SCISetting switchCellWithTitle:@"Hide stories tray" subtitle:@"Hides the story tray at the top and within your feed" defaultsKey:@"hide_stories_tray"],
-                                                [SCISetting switchCellWithTitle:@"Hide entire feed" subtitle:@"Removes all content from your home feed, including posts" defaultsKey:@"hide_entire_feed"],
-                                                [SCISetting switchCellWithTitle:@"No suggested posts" subtitle:@"Removes suggested posts from your feed" defaultsKey:@"no_suggested_post"],
-                                                [SCISetting switchCellWithTitle:@"No suggested for you" subtitle:@"Hides suggested accounts for you to follow" defaultsKey:@"no_suggested_account"],
-                                                [SCISetting switchCellWithTitle:@"No suggested reels" subtitle:@"Hides suggested reels to watch" defaultsKey:@"no_suggested_reels"],
-                                                [SCISetting switchCellWithTitle:@"No suggested threads posts" subtitle:@"Hides suggested threads posts" defaultsKey:@"no_suggested_threads"],
-                                                [SCISetting switchCellWithTitle:@"Disable video autoplay" subtitle:@"Prevents videos on your feed from playing automatically" defaultsKey:@"disable_feed_autoplay"]
+                                                [SCISetting switchCellWithTitle:@"ストーリー欄を隠す" subtitle:@"上部とフィード内のストーリー欄を隠します" defaultsKey:@"hide_stories_tray"],
+                                                [SCISetting switchCellWithTitle:@"フィードを丸ごと隠す" subtitle:@"ホームのフィードから投稿を含むすべての内容を消します" defaultsKey:@"hide_entire_feed"],
+                                                [SCISetting switchCellWithTitle:@"おすすめ投稿を消す" subtitle:@"フィードからおすすめ投稿を取り除きます" defaultsKey:@"no_suggested_post"],
+                                                [SCISetting switchCellWithTitle:@"「あなたへのおすすめ」を消す" subtitle:@"フォローのおすすめアカウントを隠します" defaultsKey:@"no_suggested_account"],
+                                                [SCISetting switchCellWithTitle:@"おすすめリールを消す" subtitle:@"おすすめのリールを隠します" defaultsKey:@"no_suggested_reels"],
+                                                [SCISetting switchCellWithTitle:@"Threads の投稿を消す" subtitle:@"おすすめされる Threads の投稿を隠します" defaultsKey:@"no_suggested_threads"],
+                                                [SCISetting switchCellWithTitle:@"動画の自動再生を止める" subtitle:@"フィードの動画が勝手に再生されなくなります" defaultsKey:@"disable_feed_autoplay"]
                                             ]
                                         }]
                 ],
-                [SCISetting navigationCellWithTitle:@"Reels"
+                [SCISetting navigationCellWithTitle:@"リール"
                                            subtitle:@""
                                                icon:[SCISymbol symbolWithName:@"film.stack"]
                                         navSections:@[@{
                                             @"header": @"",
                                             @"rows": @[
-                                                [SCISetting menuCellWithTitle:@"Tap Controls" subtitle:@"Change what happens when you tap on a reel" menu:[self menus][@"reels_tap_control"]],
-                                                [SCISetting switchCellWithTitle:@"Always show progress scrubber" subtitle:@"Forces the progress bar to appear on every reel" defaultsKey:@"reels_show_scrubber"],
-                                                [SCISetting switchCellWithTitle:@"Disable auto-unmuting reels" subtitle:@"Prevents reels from unmuting when the volume/silent button is pressed" defaultsKey:@"disable_auto_unmuting_reels" requiresRestart:YES],
-                                                [SCISetting switchCellWithTitle:@"Confirm reel refresh" subtitle:@"Shows an alert when you trigger a reels refresh" defaultsKey:@"refresh_reel_confirm"],
+                                                [SCISetting menuCellWithTitle:@"タップ操作" subtitle:@"リールをタップしたときの動作を変えます" menu:[self menus][@"reels_tap_control"]],
+                                                [SCISetting switchCellWithTitle:@"シークバーを常に出す" subtitle:@"すべてのリールで進行バーを表示します" defaultsKey:@"reels_show_scrubber"],
+                                                [SCISetting switchCellWithTitle:@"自動でミュート解除しない" subtitle:@"音量ボタンや消音スイッチでミュートが解除されなくなります" defaultsKey:@"disable_auto_unmuting_reels" requiresRestart:YES],
+                                                [SCISetting switchCellWithTitle:@"リール更新の確認" subtitle:@"リールを更新しようとしたとき確認を出します" defaultsKey:@"refresh_reel_confirm"],
                                             ]
                                         },
                                         @{
-                                            @"header": @"Hiding",
+                                            @"header": @"非表示",
                                             @"rows": @[
-                                                [SCISetting switchCellWithTitle:@"Hide reels header" subtitle:@"Hides the top navigation bar when watching reels" defaultsKey:@"hide_reels_header"],
-                                                [SCISetting switchCellWithTitle:@"Hide reels blend button" subtitle:@"Hides the button in DMs to open a reels blend" defaultsKey:@"hide_reels_blend"]
+                                                [SCISetting switchCellWithTitle:@"リールの上部バーを隠す" subtitle:@"リール視聴中の上部バーを隠します" defaultsKey:@"hide_reels_header"],
+                                                [SCISetting switchCellWithTitle:@"ブレンドのボタンを隠す" subtitle:@"DM にあるリールのブレンドを開くボタンを隠します" defaultsKey:@"hide_reels_blend"]
                                             ]
                                         },
                                         @{
-                                            @"header": @"Limits",
+                                            @"header": @"制限",
                                             @"rows": @[
-                                                [SCISetting switchCellWithTitle:@"Disable scrolling reels" subtitle:@"Prevents reels from being scrolled to the next video" defaultsKey:@"disable_scrolling_reels" requiresRestart:YES],
-                                                [SCISetting switchCellWithTitle:@"Prevent doom scrolling" subtitle:@"Limits the amount of reels available to scroll at any given time, and prevents refreshing" defaultsKey:@"prevent_doom_scrolling"],
-                                                [SCISetting stepperCellWithTitle:@"Doom scrolling limit" subtitle:@"Only loads %@ %@" defaultsKey:@"doom_scrolling_reel_count" min:1 max:100 step:1 label:@"reels" singularLabel:@"reel"]
+                                                [SCISetting switchCellWithTitle:@"リールのスクロールを止める" subtitle:@"次の動画へスクロールできなくします" defaultsKey:@"disable_scrolling_reels" requiresRestart:YES],
+                                                [SCISetting switchCellWithTitle:@"延々と見続けるのを防ぐ" subtitle:@"一度にスクロールできるリールの数を制限し、更新もできなくします" defaultsKey:@"prevent_doom_scrolling"],
+                                                [SCISetting stepperCellWithTitle:@"スクロールできる本数" subtitle:@"%@ %@ だけ読み込む" defaultsKey:@"doom_scrolling_reel_count" min:1 max:100 step:1 label:@"reels" singularLabel:@"reel"]
                                             ]
                                         }]
                 ],
-                [SCISetting navigationCellWithTitle:@"Saving"
+                [SCISetting navigationCellWithTitle:@"保存"
                                            subtitle:@""
                                                icon:[SCISymbol symbolWithName:@"tray.and.arrow.down"]
                                         navSections:@[@{
                                             @"header": @"",
                                             @"rows": @[
-                                                [SCISetting switchCellWithTitle:@"Download feed posts" subtitle:@"Long-press with finger(s) to download posts in the home tab" defaultsKey:@"dw_feed_posts"],
-                                                [SCISetting switchCellWithTitle:@"Download reels" subtitle:@"Long-press with finger(s) on a reel to download" defaultsKey:@"dw_reels"],
-                                                [SCISetting switchCellWithTitle:@"Download stories" subtitle:@"Long-press with finger(s) while viewing someone's story to download" defaultsKey:@"dw_story"],
-                                                [SCISetting switchCellWithTitle:@"Save profile picture" subtitle:@"On someone's profile, click their profile picture to enlarge it, then hold to download" defaultsKey:@"save_profile"]
+                                                [SCISetting switchCellWithTitle:@"フィードの投稿を保存" subtitle:@"ホームで投稿を指で長押しすると保存します" defaultsKey:@"dw_feed_posts"],
+                                                [SCISetting switchCellWithTitle:@"リールを保存" subtitle:@"リールを指で長押しすると保存します" defaultsKey:@"dw_reels"],
+                                                [SCISetting switchCellWithTitle:@"ストーリーを保存" subtitle:@"ストーリーを見ている間に指で長押しすると保存します" defaultsKey:@"dw_story"],
+                                                [SCISetting switchCellWithTitle:@"プロフィール写真を保存" subtitle:@"プロフィール写真をタップして拡大し、そのまま長押しすると保存します" defaultsKey:@"save_profile"]
                                             ]
                                         },
                                         @{
-                                            @"header": @"Customize gestures",
+                                            @"header": @"長押しの設定",
                                             @"rows": @[
-                                                [SCISetting stepperCellWithTitle:@"Finger count for long-press" subtitle:@"Downloads with %@ %@" defaultsKey:@"dw_finger_count" min:1 max:5 step:1 label:@"fingers" singularLabel:@"finger"],
-                                                [SCISetting stepperCellWithTitle:@"Long-press hold time" subtitle:@"Press finger(s) for %@ %@" defaultsKey:@"dw_finger_duration" min:0 max:10 step:0.25 label:@"sec" singularLabel:@"sec"]
+                                                [SCISetting stepperCellWithTitle:@"長押しする指の本数" subtitle:@"%@ %@ で保存" defaultsKey:@"dw_finger_count" min:1 max:5 step:1 label:@"fingers" singularLabel:@"finger"],
+                                                [SCISetting stepperCellWithTitle:@"長押しの秒数" subtitle:@"%@ %@ 長押し" defaultsKey:@"dw_finger_duration" min:0 max:10 step:0.25 label:@"sec" singularLabel:@"sec"]
                                             ]
                                         }]
                 ],
-                [SCISetting navigationCellWithTitle:@"Stories and messages"
+                [SCISetting navigationCellWithTitle:@"ストーリーとメッセージ"
                                            subtitle:@""
                                                icon:[SCISymbol symbolWithName:@"rectangle.portrait.on.rectangle.portrait.angled"]
                                         navSections:@[@{
-                                            @"header": @"Messages",
+                                            @"header": @"メッセージ",
                                             @"rows": @[
-                                                [SCISetting switchCellWithTitle:@"Keep deleted messages" subtitle:@"Saves deleted messages in chat conversations" defaultsKey:@"keep_deleted_message"],
-                                                [SCISetting switchCellWithTitle:@"Manually mark messages as seen" subtitle:@"Adds a button to DM threads, which will mark messages as seen" defaultsKey:@"remove_lastseen"],
-                                                [SCISetting switchCellWithTitle:@"Disable typing status" subtitle:@"Prevents the typing indicator from being shown to others when you're typing in DMs" defaultsKey:@"disable_typing_status"],
+                                                [SCISetting switchCellWithTitle:@"削除されたメッセージを残す" subtitle:@"会話の中で削除されたメッセージを残します" defaultsKey:@"keep_deleted_message"],
+                                                [SCISetting switchCellWithTitle:@"既読を手動でつける" subtitle:@"DM に、既読をつけるボタンを足します" defaultsKey:@"remove_lastseen"],
+                                                [SCISetting switchCellWithTitle:@"入力中を知らせない" subtitle:@"DM の入力中に、相手へ「入力中」が出なくなります" defaultsKey:@"disable_typing_status"],
                                             ]
                                         },
                                         @{
-                                            @"header": @"Visual messages & stories",
+                                            @"header": @"消える写真・動画とストーリー",
                                             @"rows": @[
-                                                [SCISetting switchCellWithTitle:@"Unlimited replay of visual messages" subtitle:@"Replays direct visual messages normal/once stories unlimited times (toggle with image check icon)" defaultsKey:@"unlimited_replay"],
-                                                [SCISetting switchCellWithTitle:@"Disable view-once limitations" subtitle:@"Makes view-once messages behave like normal visual messages (loopable/pauseable)" defaultsKey:@"disable_view_once_limitations"],
-                                                [SCISetting switchCellWithTitle:@"Disable screenshot detection" subtitle:@"Removes the screenshot-prevention features for visual messages in DMs" defaultsKey:@"remove_screenshot_alert"],
-                                                [SCISetting switchCellWithTitle:@"Disable story seen receipt" subtitle:@"Hides the notification for others when you view their story" defaultsKey:@"no_seen_receipt"],
-                                                [SCISetting switchCellWithTitle:@"Disable instants creation" subtitle:@"Hides the functionality to create/send instants" defaultsKey:@"disable_instants_creation" requiresRestart:YES]
+                                                [SCISetting switchCellWithTitle:@"消える写真・動画を何度でも見る" subtitle:@"一度きりの写真・動画を何度でも再生できます(画像のチェックアイコンで切り替え)" defaultsKey:@"unlimited_replay"],
+                                                [SCISetting switchCellWithTitle:@"一度きりの制限を外す" subtitle:@"一度きりのメッセージを普通の写真・動画と同じように扱います(繰り返し・一時停止可)" defaultsKey:@"disable_view_once_limitations"],
+                                                [SCISetting switchCellWithTitle:@"スクショの検知を止める" subtitle:@"DM の写真・動画のスクショ防止機能を無効にします" defaultsKey:@"remove_screenshot_alert"],
+                                                [SCISetting switchCellWithTitle:@"ストーリーの足跡を残さない" subtitle:@"相手のストーリーを見ても通知されなくなります" defaultsKey:@"no_seen_receipt"],
+                                                [SCISetting switchCellWithTitle:@"インスタントの作成を隠す" subtitle:@"インスタントを作る・送る機能を隠します" defaultsKey:@"disable_instants_creation" requiresRestart:YES]
                                             ]
                                         }]
                 ],
-                [SCISetting navigationCellWithTitle:@"Navigation"
+                [SCISetting navigationCellWithTitle:@"ナビゲーション"
                                            subtitle:@""
                                                icon:[SCISymbol symbolWithName:@"hand.draw.fill"]
                                         navSections:@[@{
                                             @"header": @"",
                                             @"rows": @[
-                                                [SCISetting menuCellWithTitle:@"Icon order" subtitle:@"The order of the icons on the bottom navigation bar" menu:[self menus][@"nav_icon_ordering"]],
-                                                [SCISetting menuCellWithTitle:@"Swipe between tabs" subtitle:@"Lets you swipe to switch between navigation bar tabs" menu:[self menus][@"swipe_nav_tabs"]],
+                                                [SCISetting menuCellWithTitle:@"アイコンの並び" subtitle:@"下のバーに並ぶアイコンの順番" menu:[self menus][@"nav_icon_ordering"]],
+                                                [SCISetting menuCellWithTitle:@"スワイプでタブを移動" subtitle:@"横スワイプで下のバーのタブを切り替えられます" menu:[self menus][@"swipe_nav_tabs"]],
                                             ]
                                         },
                                         @{
-                                            @"header": @"Hiding tabs",
+                                            @"header": @"タブを隠す",
                                             @"rows": @[
-                                                [SCISetting switchCellWithTitle:@"Hide feed tab" subtitle:@"Hides the feed/home tab on the bottom navigation bar" defaultsKey:@"hide_feed_tab" requiresRestart:YES],
-                                                [SCISetting switchCellWithTitle:@"Hide explore tab" subtitle:@"Hides the explore/search tab on the bottom navigation bar" defaultsKey:@"hide_explore_tab" requiresRestart:YES],
-                                                [SCISetting switchCellWithTitle:@"Hide reels tab" subtitle:@"Hides the reels tab on the bottom navigation bar" defaultsKey:@"hide_reels_tab" requiresRestart:YES],
-                                                [SCISetting switchCellWithTitle:@"Hide create tab" subtitle:@"Hides the create tab on the bottom navigation bar" defaultsKey:@"hide_create_tab" requiresRestart:YES]
+                                                [SCISetting switchCellWithTitle:@"ホームタブを隠す" subtitle:@"下のバーからホームタブを隠します" defaultsKey:@"hide_feed_tab" requiresRestart:YES],
+                                                [SCISetting switchCellWithTitle:@"検索タブを隠す" subtitle:@"下のバーから検索タブを隠します" defaultsKey:@"hide_explore_tab" requiresRestart:YES],
+                                                [SCISetting switchCellWithTitle:@"リールタブを隠す" subtitle:@"下のバーからリールタブを隠します" defaultsKey:@"hide_reels_tab" requiresRestart:YES],
+                                                [SCISetting switchCellWithTitle:@"作成タブを隠す" subtitle:@"下のバーから作成タブを隠します" defaultsKey:@"hide_create_tab" requiresRestart:YES]
                                             ]
                                         }]
                 ],
-                [SCISetting navigationCellWithTitle:@"Confirm actions"
+                [SCISetting navigationCellWithTitle:@"操作の確認"
                                            subtitle:@""
                                                icon:[SCISymbol symbolWithName:@"checkmark"]
                                         navSections:@[@{
                                             @"header": @"",
                                             @"rows": @[
-                                                [SCISetting switchCellWithTitle:@"Confirm like: Posts/Stories" subtitle:@"Shows an alert when you click the like button on posts or stories to confirm the like" defaultsKey:@"like_confirm"],
-                                                [SCISetting switchCellWithTitle:@"Confirm like: Reels" subtitle:@"Shows an alert when you click the like button on reels to confirm the like" defaultsKey:@"like_confirm_reels"]
+                                                [SCISetting switchCellWithTitle:@"いいねの確認(投稿・ストーリー)" subtitle:@"投稿やストーリーでいいねを押したとき確認を出します" defaultsKey:@"like_confirm"],
+                                                [SCISetting switchCellWithTitle:@"いいねの確認(リール)" subtitle:@"リールでいいねを押したとき確認を出します" defaultsKey:@"like_confirm_reels"]
                                             ]
                                         },
                                         @{
                                             @"header": @"",
                                             @"rows": @[
-                                                [SCISetting switchCellWithTitle:@"Confirm follow" subtitle:@"Shows an alert when you click the follow button to confirm the follow" defaultsKey:@"follow_confirm"],
-                                                [SCISetting switchCellWithTitle:@"Confirm repost" subtitle:@"Shows an alert when you click the repost button to confirm before resposting" defaultsKey:@"repost_confirm"],
-                                                [SCISetting switchCellWithTitle:@"Confirm call" subtitle:@"Shows an alert when you click the audio/video call button to confirm before calling" defaultsKey:@"call_confirm"],
-                                                [SCISetting switchCellWithTitle:@"Confirm voice messages" subtitle:@"Shows an alert to confirm before sending a voice message" defaultsKey:@"voice_message_confirm"],
-                                                [SCISetting switchCellWithTitle:@"Confirm follow requests" subtitle:@"Shows an alert when you accept/decline a follow request" defaultsKey:@"follow_request_confirm"],
-                                                [SCISetting switchCellWithTitle:@"Confirm shh mode" subtitle:@"Shows an alert to confirm before toggling disappearing messages" defaultsKey:@"shh_mode_confirm"],
-                                                [SCISetting switchCellWithTitle:@"Confirm posting comment" subtitle:@"Shows an alert when you click the post comment button to confirm" defaultsKey:@"post_comment_confirm"],
-                                                [SCISetting switchCellWithTitle:@"Confirm changing theme" subtitle:@"Shows an alert when you change a chat theme to confirm" defaultsKey:@"change_direct_theme_confirm"],
-                                                [SCISetting switchCellWithTitle:@"Confirm sticker interaction" subtitle:@"Shows an alert when you click a sticker on someone's story to confirm the action" defaultsKey:@"sticker_interact_confirm"]
+                                                [SCISetting switchCellWithTitle:@"フォローの確認" subtitle:@"フォローを押したとき確認を出します" defaultsKey:@"follow_confirm"],
+                                                [SCISetting switchCellWithTitle:@"リポストの確認" subtitle:@"リポストを押したとき確認を出します" defaultsKey:@"repost_confirm"],
+                                                [SCISetting switchCellWithTitle:@"通話の確認" subtitle:@"通話ボタンを押したとき確認を出します" defaultsKey:@"call_confirm"],
+                                                [SCISetting switchCellWithTitle:@"音声メッセージの確認" subtitle:@"音声メッセージを送る前に確認を出します" defaultsKey:@"voice_message_confirm"],
+                                                [SCISetting switchCellWithTitle:@"フォロー申請の確認" subtitle:@"フォロー申請を承認・拒否するとき確認を出します" defaultsKey:@"follow_request_confirm"],
+                                                [SCISetting switchCellWithTitle:@"消えるメッセージの確認" subtitle:@"消えるメッセージを切り替える前に確認を出します" defaultsKey:@"shh_mode_confirm"],
+                                                [SCISetting switchCellWithTitle:@"コメント投稿の確認" subtitle:@"コメントを投稿するとき確認を出します" defaultsKey:@"post_comment_confirm"],
+                                                [SCISetting switchCellWithTitle:@"テーマ変更の確認" subtitle:@"チャットのテーマを変えるとき確認を出します" defaultsKey:@"change_direct_theme_confirm"],
+                                                [SCISetting switchCellWithTitle:@"スタンプ操作の確認" subtitle:@"ストーリーのスタンプを押したとき確認を出します" defaultsKey:@"sticker_interact_confirm"]
                                             ]
                                         }]
                 ]
@@ -195,12 +195,12 @@
         @{
             @"header": @"",
             @"rows": @[
-                // [SCISetting navigationCellWithTitle:@"Experimental"
+                // [SCISetting navigationCellWithTitle:@"実験中"
                 //                            subtitle:@""
                 //                                icon:[SCISymbol symbolWithName:@"testtube.2"]
                 //                         navSections:@[@{
-                //                             @"header": @"Warning",
-                //                             @"footer": @"These features are unstable and cause the Instagram app to crash unexpectedly.\n\nUse at your own risk!"
+                //                             @"header": @"注意",
+                //                             @"footer": @"ここの機能は不安定で、Instagram が突然落ちることがあります。\n\n自己責任で使ってください。"
                 //                         },
                 //                         @{
                 //                             @"header": @"",
@@ -210,23 +210,24 @@
                 //                         }
                 //                         ]
                 // ],
-                [SCISetting navigationCellWithTitle:@"Debug"
+                [SCISetting navigationCellWithTitle:@"開発者向け"
                                            subtitle:@""
                                                icon:[SCISymbol symbolWithName:@"ladybug"]
                                         navSections:@[@{
                                             @"header": @"FLEX",
                                             @"rows": @[
-                                                [SCISetting switchCellWithTitle:@"Enable FLEX gesture" subtitle:@"Allows you to hold 5 fingers on the screen to open the FLEX explorer" defaultsKey:@"flex_instagram"],
-                                                [SCISetting switchCellWithTitle:@"Open FLEX on app launch" subtitle:@"Automatically opens the FLEX explorer when the app launches" defaultsKey:@"flex_app_launch"],
-                                                [SCISetting switchCellWithTitle:@"Open FLEX on app focus" subtitle:@"Automatically opens the FLEX explorer when the app is focused" defaultsKey:@"flex_app_start"]
+                                                [SCISetting switchCellWithTitle:@"FLEX のジェスチャーを使う" subtitle:@"画面を 5 本指で長押しすると FLEX が開きます" defaultsKey:@"flex_instagram"],
+                                                [SCISetting switchCellWithTitle:@"起動時に FLEX を開く" subtitle:@"アプリを起動したとき自動で FLEX を開きます" defaultsKey:@"flex_app_launch"],
+                                                [SCISetting switchCellWithTitle:@"前面に戻ったとき FLEX を開く" subtitle:@"アプリが前面に戻ったとき自動で FLEX を開きます" defaultsKey:@"flex_app_start"]
                                             ]
                                         },
                                         @{
                                             @"header": @"SCInsta",
                                             @"rows": @[
-                                                [SCISetting switchCellWithTitle:@"Enable tweak settings quick-access" subtitle:@"Allows you to hold on the home tab to open the SCInsta settings" defaultsKey:@"settings_shortcut" requiresRestart:YES],
-                                                [SCISetting switchCellWithTitle:@"Show tweak settings on app launch" subtitle:@"Automatically opens the SCInsta settings when the app launches" defaultsKey:@"tweak_settings_app_launch"],
-                                                [SCISetting buttonCellWithTitle:@"Reset onboarding completion state"
+                                                [SCISetting switchCellWithTitle:@"出てきた画面の名前を表示" subtitle:@"ポップアップが出るたびに、その内部名を数秒だけ画面に出します。消したい画面を特定するため" defaultsKey:@"debug_show_presented"],
+                                                [SCISetting switchCellWithTitle:@"設定のショートカット" subtitle:@"ホームタブを長押しすると SCInsta の設定が開きます" defaultsKey:@"settings_shortcut" requiresRestart:YES],
+                                                [SCISetting switchCellWithTitle:@"起動時に設定を開く" subtitle:@"アプリを起動したとき自動で SCInsta の設定を開きます" defaultsKey:@"tweak_settings_app_launch"],
+                                                [SCISetting buttonCellWithTitle:@"初回案内の状態を戻す"
                                                                            subtitle:@""
                                                                                icon:nil
                                                                              action:^(void) { [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"SCInstaFirstRun"]; [SCIUtils showRestartConfirmation];}
@@ -236,7 +237,7 @@
                                         @{
                                             @"header": @"Instagram",
                                             @"rows": @[
-                                                [SCISetting switchCellWithTitle:@"Disable safe mode" subtitle:@"Makes Instagram not reset settings after subsequent crashes (at your own risk)" defaultsKey:@"disable_safe_mode"]
+                                                [SCISetting switchCellWithTitle:@"セーフモードを無効にする" subtitle:@"続けて落ちたときに Instagram が設定を初期化しないようにします(自己責任)" defaultsKey:@"disable_safe_mode"]
                                             ]
                                         },
                                         @{
@@ -245,7 +246,7 @@
                                                 [SCISetting staticCellWithTitle:@"Static Cell" subtitle:@"" icon:[SCISymbol symbolWithName:@"tablecells"]],
                                                 [SCISetting switchCellWithTitle:@"Switch Cell" subtitle:@"Tap the switch" defaultsKey:@"test_switch_cell"],
                                                 [SCISetting switchCellWithTitle:@"Switch Cell (Restart)" subtitle:@"Tap the switch" defaultsKey:@"test_switch_cell_restart" requiresRestart:YES],
-                                                [SCISetting stepperCellWithTitle:@"Stepper cell" subtitle:@"I have %@%@" defaultsKey:@"test_stepper_cell" min:-10 max:1000 step:5.5 label:@"$" singularLabel:@"$"],
+                                                [SCISetting stepperCellWithTitle:@"Stepper cell" subtitle:@"%@%@" defaultsKey:@"test_stepper_cell" min:-10 max:1000 step:5.5 label:@"$" singularLabel:@"$"],
                                                 [SCISetting linkCellWithTitle:@"Link Cell" subtitle:@"Using icon" icon:[SCISymbol symbolWithName:@"link" color:[UIColor systemTealColor] size:20.0] url:@"https://google.com"],
                                                 [SCISetting linkCellWithTitle:@"Link Cell" subtitle:@"Using image" imageUrl:@"https://i.imgur.com/c9CbytZ.png" url:@"https://google.com"],
                                                 [SCISetting buttonCellWithTitle:@"Button Cell"
@@ -270,10 +271,10 @@
             ]
         },
         @{
-            @"header": @"Credits",
+            @"header": @"クレジット",
             @"rows": @[
-                [SCISetting linkCellWithTitle:@"Developer" subtitle:@"SoCuul" imageUrl:@"https://i.imgur.com/c9CbytZ.png" url:@"https://socuul.dev"],
-                [SCISetting linkCellWithTitle:@"View Repo" subtitle:@"View the tweak's source code on GitHub" imageUrl:@"https://i.imgur.com/BBUNzeP.png" url:@"https://github.com/SoCuul/SCInsta"]
+                [SCISetting linkCellWithTitle:@"開発者" subtitle:@"SoCuul" imageUrl:@"https://i.imgur.com/c9CbytZ.png" url:@"https://socuul.dev"],
+                [SCISetting linkCellWithTitle:@"リポジトリを見る" subtitle:@"GitHub でソースコードを見る" imageUrl:@"https://i.imgur.com/BBUNzeP.png" url:@"https://github.com/SoCuul/SCInsta"]
             ],
             @"footer": [NSString stringWithFormat:@"SCInsta %@\n\nInstagram v%@", SCIVersionString, [SCIUtils IGVersionString]]
         }
@@ -311,7 +312,7 @@
 + (NSDictionary *)menus {
     return @{
         @"reels_tap_control": [UIMenu menuWithChildren:@[
-            [UICommand commandWithTitle:@"Default"
+            [UICommand commandWithTitle:@"既定"
                                     image:nil
                                     action:@selector(menuChanged:)
                             propertyList:@{
@@ -325,7 +326,7 @@
                         identifier:nil
                             options:UIMenuOptionsDisplayInline
                             children:@[
-                                [UICommand commandWithTitle:@"Pause/Play"
+                                [UICommand commandWithTitle:@"一時停止と再生"
                                                         image:nil
                                                         action:@selector(menuChanged:)
                                                 propertyList:@{
@@ -334,7 +335,7 @@
                                                     @"requiresRestart": @YES
                                                 }
                                 ],
-                                [UICommand commandWithTitle:@"Mute/Unmute"
+                                [UICommand commandWithTitle:@"ミュート切り替え"
                                                         image:nil
                                                         action:@selector(menuChanged:)
                                                 propertyList:@{
@@ -348,7 +349,7 @@
         ]],
 
         @"nav_icon_ordering": [UIMenu menuWithChildren:@[
-            [UICommand commandWithTitle:@"Default"
+            [UICommand commandWithTitle:@"既定"
                                     image:nil
                                     action:@selector(menuChanged:)
                             propertyList:@{
@@ -362,7 +363,7 @@
                         identifier:nil
                             options:UIMenuOptionsDisplayInline
                             children:@[
-                                [UICommand commandWithTitle:@"Classic"
+                                [UICommand commandWithTitle:@"従来"
                                                         image:nil
                                                         action:@selector(menuChanged:)
                                                 propertyList:@{
@@ -371,7 +372,7 @@
                                                     @"requiresRestart": @YES
                                                 }
                                 ],
-                                [UICommand commandWithTitle:@"Standard"
+                                [UICommand commandWithTitle:@"標準"
                                                         image:nil
                                                         action:@selector(menuChanged:)
                                                 propertyList:@{
@@ -380,7 +381,7 @@
                                                     @"requiresRestart": @YES
                                                 }
                                 ],
-                                [UICommand commandWithTitle:@"Alternate"
+                                [UICommand commandWithTitle:@"別の形"
                                                         image:nil
                                                         action:@selector(menuChanged:)
                                                 propertyList:@{
@@ -393,7 +394,7 @@
             ]
         ]],
         @"swipe_nav_tabs": [UIMenu menuWithChildren:@[
-            [UICommand commandWithTitle:@"Default"
+            [UICommand commandWithTitle:@"既定"
                                     image:nil
                                     action:@selector(menuChanged:)
                             propertyList:@{
@@ -407,7 +408,7 @@
                         identifier:nil
                             options:UIMenuOptionsDisplayInline
                             children:@[
-                                [UICommand commandWithTitle:@"Enabled"
+                                [UICommand commandWithTitle:@"有効"
                                                         image:nil
                                                         action:@selector(menuChanged:)
                                                 propertyList:@{
@@ -416,7 +417,7 @@
                                                     @"requiresRestart": @YES
                                                 }
                                 ],
-                                [UICommand commandWithTitle:@"Disabled"
+                                [UICommand commandWithTitle:@"無効"
                                                         image:nil
                                                         action:@selector(menuChanged:)
                                                 propertyList:@{
@@ -453,7 +454,7 @@
                                 ]
                             ]
             ],
-            [UICommand commandWithTitle:@"Requires restart"
+            [UICommand commandWithTitle:@"再起動が必要"
                                   image:nil
                                  action:@selector(menuChanged:)
                            propertyList:@{
