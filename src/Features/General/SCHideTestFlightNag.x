@@ -25,3 +25,12 @@
 }
 
 %end
+
+// On by default. Nobody installs this fork and then wants to be asked to update the beta
+// on every launch, and a switch that starts off just means one more round trip.
+%ctor {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if ([defaults objectForKey:@"hide_testflight_nag"] == nil) {
+        [defaults setBool:YES forKey:@"hide_testflight_nag"];
+    }
+}
