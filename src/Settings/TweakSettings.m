@@ -31,6 +31,7 @@
                                             @"header": @"",
                                             @"rows": @[
                                                 [SCISetting switchCellWithTitle:@"広告を隠す" subtitle:@"アプリ内の広告をすべて取り除きます" defaultsKey:@"hide_ads"],
+                                                [SCISetting switchCellWithTitle:@"ベータ版の更新催促を隠す" subtitle:@"TestFlight 版が起動のたびに出す「Instagram ベータ版をアップデート」の画面を出さなくします" defaultsKey:@"hide_testflight_nag"],
                                                 [SCISetting switchCellWithTitle:@"Meta AI を隠す" subtitle:@"アプリ内の Meta AI のボタンと機能を隠します" defaultsKey:@"hide_meta_ai"],
                                                 [SCISetting switchCellWithTitle:@"説明文をコピー" subtitle:@"説明文を長押しするとコピーできます" defaultsKey:@"copy_description"],
                                                 [SCISetting switchCellWithTitle:@"検索履歴を残さない" subtitle:@"検索欄が最近の検索を保存しなくなります" defaultsKey:@"no_recent_searches"],
