@@ -30,8 +30,16 @@
     colorPickerController.title = @"Select color";
     colorPickerController.modalPresentationStyle = UIModalPresentationPopover;
     colorPickerController.supportsAlpha = NO;
-    colorPickerController.selectedColor = self.color;
-    
+
+    if ([self respondsToSelector:@selector(color)]) {
+        UIColor *currentColor = self.color;
+
+        // -setSelectedColor: does not take nil
+        if (currentColor != nil) {
+            colorPickerController.selectedColor = currentColor;
+        }
+    }
+
     UIViewController *presentingVC = [SCIUtils nearestViewControllerForView:self];
     
     if (presentingVC != nil) {
@@ -47,9 +55,14 @@
     NSLog(@"[SCInsta] Selected text color: %@", color);
 
     UIColor *opaque = [color colorWithAlphaComponent:1.0];
-    self.color = opaque;
 
-    [self setPushedDown:YES];
+    if ([self respondsToSelector:@selector(setColor:)]) {
+        self.color = opaque;
+    }
+
+    if ([self respondsToSelector:@selector(setPushedDown:)]) {
+        [self setPushedDown:YES];
+    }
 
     // Trigger change for text color
     id presentingVC = [SCIUtils nearestViewControllerForView:self];
@@ -77,7 +90,7 @@
     ) {
         IGStoryEyedropperToggleButton *_eyedropperToggleButton = MSHookIvar<IGStoryEyedropperToggleButton *>(colorPickingControls, "_eyedropperToggleButton");
 
-        if (_eyedropperToggleButton != nil) {
+        if ([_eyedropperToggleButton respondsToSelector:@selector(setPushedDown:)]) {
             [_eyedropperToggleButton setPushedDown:NO];
         }
     }

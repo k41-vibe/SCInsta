@@ -205,7 +205,7 @@ shouldPersistLastBugReportId:(id)arg6
         if ([obj isKindOfClass:%c(IGLabelItemViewModel)]) {
 
             // Broadcast channels
-            if ([[obj valueForKey:@"uniqueIdentifier"] isEqualToString:@"channels"]) {
+            if ([[SCIUtils getValueForObj:obj key:@"uniqueIdentifier"] isEqualToString:@"channels"]) {
                 if ([SCIUtils getBoolPref:@"no_suggested_chats"]) {
                     NSLog(@"[SCInsta] Hiding suggested chats (header)");
 
@@ -214,7 +214,7 @@ shouldPersistLastBugReportId:(id)arg6
             }
 
             // Ask Meta AI
-            else if ([[obj valueForKey:@"labelTitle"] isEqualToString:@"Ask Meta AI"]) {
+            else if ([[SCIUtils getValueForObj:obj key:@"labelTitle"] isEqualToString:@"Ask Meta AI"]) {
                 if ([SCIUtils getBoolPref:@"hide_meta_ai"]) {
                     NSLog(@"[SCInsta] Hiding meta ai suggested chats (header)");
 
@@ -223,7 +223,7 @@ shouldPersistLastBugReportId:(id)arg6
             }
 
             // AI
-            else if ([[obj valueForKey:@"labelTitle"] isEqualToString:@"AI"]) {
+            else if ([[SCIUtils getValueForObj:obj key:@"labelTitle"] isEqualToString:@"AI"]) {
                 if ([SCIUtils getBoolPref:@"hide_meta_ai"]) {
                     NSLog(@"[SCInsta] Hiding ai suggested chats (header)");
 
@@ -305,7 +305,7 @@ shouldPersistLastBugReportId:(id)arg6
             if ([obj isKindOfClass:%c(IGDirectCreateChatCellViewModel)]) {
 
                 // "AI Chats"
-                if ([[obj valueForKey:@"title"] isEqualToString:@"AI chats"]) {
+                if ([[SCIUtils getValueForObj:obj key:@"title"] isEqualToString:@"AI chats"]) {
                     NSLog(@"[SCInsta] Hiding meta ai: direct thread creation ai chats section");
 
                     shouldHide = YES;
@@ -431,7 +431,7 @@ shouldPersistLastBugReportId:(id)arg6
             if ([obj isKindOfClass:%c(IGLabelItemViewModel)]) {
 
                 // "Ask Meta AI" search results header
-                if ([[obj valueForKey:@"labelTitle"] isEqualToString:@"Ask Meta AI"]) {
+                if ([[SCIUtils getValueForObj:obj key:@"labelTitle"] isEqualToString:@"Ask Meta AI"]) {
                     shouldHide = YES;
                 }
 
@@ -476,7 +476,7 @@ shouldPersistLastBugReportId:(id)arg6
             if ([obj isKindOfClass:%c(IGLabelItemViewModel)]) {
 
                 // "Suggested for you" search results header
-                if ([[obj valueForKey:@"labelTitle"] isEqualToString:@"Suggested for you"]) {
+                if ([[SCIUtils getValueForObj:obj key:@"labelTitle"] isEqualToString:@"Suggested for you"]) {
                     shouldHide = YES;
                 }
 
@@ -516,7 +516,7 @@ shouldPersistLastBugReportId:(id)arg6
 
         if ([SCIUtils getBoolPref:@"no_suggested_users"]) {
             if ([obj isKindOfClass:%c(IGStoryTrayViewModel)]) {
-                NSNumber *type = [((IGStoryTrayViewModel *)obj) valueForKey:@"type"];
+                NSNumber *type = [SCIUtils getValueForObj:obj key:@"type"];
                 
                 // 8/9 looks to be the types for recommended stories
                 if ([type isEqual:@(8)] || [type isEqual:@(9)]) {

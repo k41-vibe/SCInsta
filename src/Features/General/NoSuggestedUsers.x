@@ -123,7 +123,7 @@
             else if ([obj isKindOfClass:%c(IGLabelItemViewModel)]) {
 
                 // "Suggested for you" search results header
-                if ([[obj valueForKey:@"labelTitle"] isEqualToString:@"Suggested for you"]) {
+                if ([[SCIUtils getValueForObj:obj key:@"labelTitle"] isEqualToString:@"Suggested for you"]) {
                     shouldHide = YES;
                 }
 
@@ -208,7 +208,7 @@
             else if ([obj isKindOfClass:%c(IGLabelItemViewModel)]) {
 
                 // "Suggested for you" search results header
-                if ([[obj valueForKey:@"labelTitle"] isEqualToString:@"Suggested for you"]) {
+                if ([[SCIUtils getValueForObj:obj key:@"labelTitle"] isEqualToString:@"Suggested for you"]) {
                     shouldHide = YES;
                 }
 

@@ -242,14 +242,14 @@ static char targetStaticRef[] = "target";
 
 %new - (void)applySCICustomTheme:(NSString *)target {
     // Get notes composer vc
-    _TtC20IGDirectNotesUISwift39IGDirectNotesBubbleEditorViewController *parentVC = [SCIUtils nearestViewControllerForView:self];
-    if (!parentVC) return;
+    _TtC20IGDirectNotesUISwift39IGDirectNotesBubbleEditorViewController *parentVC = (id)[SCIUtils nearestViewControllerForView:self];
+    if (![parentVC respondsToSelector:@selector(delegate)]) return;
 
     IGDirectNotesComposerViewController *composerVC = parentVC.delegate;
     if (!composerVC) return;
 
     // Get current theme model
-    IGNotesCustomThemeCreationModel *model = [composerVC valueForKey:@"_selectedCustomThemeCreationModel"];
+    IGNotesCustomThemeCreationModel *model = [SCIUtils getValueForObj:composerVC key:@"_selectedCustomThemeCreationModel"];
     if (!model) {
         // Create new note theme model
         model = [[%c(IGNotesCustomThemeCreationModel) alloc] init];
@@ -257,23 +257,25 @@ static char targetStaticRef[] = "target";
     }
 
     //SCILog(@"Current note theme model: %@", model);
-    [model setValue:[composerVC valueForKey:@"_composerText"] forKey:@"customEmoji"];
+    [SCIUtils setValueForObj:model key:@"customEmoji" value:[SCIUtils getValueForObj:composerVC key:@"_composerText"]];
 
     // Update saved color target
     if ([target isEqualToString:@"Background"]) {
-        [model setValue:self.backgroundColor forKey:@"backgroundColor"];
+        [SCIUtils setValueForObj:model key:@"backgroundColor" value:self.backgroundColor];
     }
     else if ([target isEqualToString:@"Text"]) {
-        [model setValue:self.textColor forKey:@"textColor"];
-        [model setValue:self.textColor forKey:@"secondaryTextColor"];  
+        [SCIUtils setValueForObj:model key:@"textColor" value:self.textColor];
+        [SCIUtils setValueForObj:model key:@"secondaryTextColor" value:self.textColor];
     }
 
     // Always set emoji to prevent it being overwritten
-    [model setValue:self.emojiText forKey:@"customEmoji"];  
+    [SCIUtils setValueForObj:model key:@"customEmoji" value:self.emojiText];
 
     //SCILog(@"Updated note theme model: %@", model);
 
     // Apply custom notes theme
+    if (![composerVC respondsToSelector:@selector(notesBubbleEditorViewControllerDidUpdateWithCustomThemeCreationModel:)]) return;
+
     [composerVC notesBubbleEditorViewControllerDidUpdateWithCustomThemeCreationModel:model];
 
     // Enable apply/cancel buttons
@@ -284,9 +286,12 @@ static char targetStaticRef[] = "target";
     if (!parentVCSubviews) return;
 
     [parentVCSubviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if ([obj isKindOfClass:%c(IGDSBottomButtonsView)]) {
+        if ([obj isKindOfClass:%c(IGDSBottomButtonsView)] && [obj respondsToSelector:@selector(setPrimaryButtonEnabled:)]) {
             [obj setPrimaryButtonEnabled:YES];
-            [obj setSecondaryButtonEnabled:YES];
+
+            if ([obj respondsToSelector:@selector(setSecondaryButtonEnabled:)]) {
+                [obj setSecondaryButtonEnabled:YES];
+            }
         }
     }];
 }

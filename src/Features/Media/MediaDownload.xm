@@ -87,7 +87,13 @@ static void initDownloaders () {
     else if ([self.delegate isKindOfClass:%c(IGFeedItemPagePhotoCell)]) {
         IGFeedItemPagePhotoCell *pagePhotoCell = self.delegate;
 
-        photo = pagePhotoCell.pagePhotoPost.photo;
+        if ([pagePhotoCell respondsToSelector:@selector(pagePhotoPost)]) {
+            IGPostItem *pagePhotoPost = pagePhotoCell.pagePhotoPost;
+
+            if ([pagePhotoPost respondsToSelector:@selector(photo)]) {
+                photo = pagePhotoPost.photo;
+            }
+        }
     }
 
     NSURL *photoUrl = [SCIUtils getPhotoUrl:photo];
@@ -338,9 +344,11 @@ static void initDownloaders () {
 
     NSURL *videoUrl;
 
-    IGStoryFullscreenSectionController *captionDelegate = self.captionDelegate;
+    IGStoryFullscreenSectionController *captionDelegate = [self respondsToSelector:@selector(captionDelegate)] ? self.captionDelegate : nil;
     if (captionDelegate) {
-        videoUrl = [SCIUtils getVideoUrlForMedia:captionDelegate.currentStoryItem];
+        if ([captionDelegate respondsToSelector:@selector(currentStoryItem)]) {
+            videoUrl = [SCIUtils getVideoUrlForMedia:[captionDelegate currentStoryItem]];
+        }
     }
     else {
         // Direct messages video player
@@ -353,6 +361,8 @@ static void initDownloaders () {
         IGDirectVisualMessage *_currentMessage = MSHookIvar<IGDirectVisualMessage *>(_dataSource, "_currentMessage"); 
         if (!_currentMessage) return;
         
+        if (![_currentMessage respondsToSelector:@selector(rawVideo)]) return;
+
         IGVideo *rawVideo = _currentMessage.rawVideo;
         if (!rawVideo) return;
         
@@ -398,8 +408,10 @@ static void initDownloaders () {
     IGImageView *_imageView = MSHookIvar<IGImageView *>(self, "_imageView");
     if (!_imageView) return;
     
+    if (![_imageView respondsToSelector:@selector(imageSpecifier)]) return;
+
     IGImageSpecifier *imageSpecifier = _imageView.imageSpecifier;
-    if (!imageSpecifier) return;
+    if (!imageSpecifier || ![imageSpecifier respondsToSelector:@selector(url)]) return;
 
     NSURL *imageUrl = imageSpecifier.url;
     if (!imageUrl) return;

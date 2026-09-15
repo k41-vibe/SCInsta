@@ -32,7 +32,8 @@ NSArray *filterSurfacesArray(NSArray *surfaces) {
     NSMutableArray *filteredSurfaces = [NSMutableArray array];
 
     for (IGMainAppSurfaceIntent *surface in surfaces) {
-        if (![surface isKindOfClass:%c(IGMainAppSurfaceIntent)]) break;
+        // skip, not break: one unexpected element must not drop every tab after it
+        if (![surface isKindOfClass:%c(IGMainAppSurfaceIntent)]) continue;
 
         if (isSurfaceShown(surface)) {
             [filteredSurfaces addObject:surface];

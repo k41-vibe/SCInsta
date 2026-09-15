@@ -27,9 +27,12 @@
     if (sender.state != UIGestureRecognizerStateBegan) return;
 
     if ([SCIUtils getBoolPref:@"teen_app_icons"]) {
-        IGHomeFeedHeaderViewController *homeFeedHeaderVC = [SCIUtils nearestViewControllerForView:self];
+        id homeFeedHeaderVC = [SCIUtils nearestViewControllerForView:self];
 
-        if (homeFeedHeaderVC != nil) {
+        if (
+            [homeFeedHeaderVC isKindOfClass:%c(IGHomeFeedHeaderViewController)]
+            && [homeFeedHeaderVC respondsToSelector:@selector(headerDidLongPressLogo:)]
+        ) {
             [homeFeedHeaderVC headerDidLongPressLogo:nil];
         }
     }

@@ -41,7 +41,9 @@
 // Messages seen button
 %new - (void)seenButtonHandler:(UIBarButtonItem *)sender {
     UIViewController *nearestVC = [SCIUtils nearestViewControllerForView:self];
-    if ([nearestVC isKindOfClass:%c(IGDirectThreadViewController)]) {
+    // The class can still be there after an update that dropped this method, so the kind
+    // check alone is not enough - it crashed here once already.
+    if ([nearestVC isKindOfClass:%c(IGDirectThreadViewController)] && [nearestVC respondsToSelector:@selector(markLastMessageAsSeen)]) {
         [(IGDirectThreadViewController *)nearestVC markLastMessageAsSeen];
 
         [SCIUtils showToastForDuration:2.5 title:@"Marked messages as seen"];

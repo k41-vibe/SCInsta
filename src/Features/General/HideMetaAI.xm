@@ -118,14 +118,9 @@
     if ([SCIUtils getBoolPref:@"hide_meta_ai"]) {
         NSLog(@"[SCInsta] Hiding meta ai: imagine tile in media picker");
 
-        @try {
-            IGDirectMediaPickerGalleryConfig *galleryConfig = [config valueForKey:@"galleryConfig"];
+        IGDirectMediaPickerGalleryConfig *galleryConfig = [SCIUtils getValueForObj:config key:@"galleryConfig"];
 
-            [galleryConfig setValue:0 forKey:@"isImagineEntryPointEnabled"];
-        }
-        @catch (NSException *exception) {
-            NSLog(@"[SCInsta] WARNING: %@\n\nFull object: %@", exception.reason, config);
-        }
+        [SCIUtils setValueForObj:galleryConfig key:@"isImagineEntryPointEnabled" value:0];
     }
 
     return %orig(arg1, [config copy], arg3, arg4, arg5, arg6, arg7, arg8, arg9);
@@ -269,7 +264,7 @@
 
             if (
                 [obj isKindOfClass:%c(IGDirectThreadThemePickerOption)]
-                && [[obj valueForKey:@"themeId"] isEqualToString:@"direct_ai_theme_creation"]
+                && [[SCIUtils getValueForObj:obj key:@"themeId"] isEqualToString:@"direct_ai_theme_creation"]
             ) {
                 NSLog(@"[SCInsta] Hiding meta ai: AI generated DM channel themes");
                 
@@ -483,7 +478,7 @@
                 NSLog(@"[SCInsta] WARNING: %@\n\nFull object: %@", exception.reason, config);
             }
 
-            NSLog(@"[SCInsta] Changed search bar placeholder from: \"%@\" to \"%@\"", placeholder, [config valueForKey:@"placeholder"]);
+            NSLog(@"[SCInsta] Changed search bar placeholder from: \"%@\" to \"%@\"", placeholder, [SCIUtils getValueForObj:config key:@"placeholder"]);
 
             // leftIconStyle
             @try {

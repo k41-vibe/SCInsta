@@ -128,6 +128,7 @@
 // Media
 + (NSURL *)getPhotoUrl:(IGPhoto *)photo {
     if (!photo) return nil;
+    if (![photo respondsToSelector:@selector(imageURLForWidth:)]) return nil;
 
     // Get highest quality photo link
     NSURL *photoUrl = [photo imageURLForWidth:100000.00];
@@ -267,18 +268,26 @@
     IGRootViewController *rootVC = (IGRootViewController *)topMostVC;
 
     // Presenter
+    if (![rootVC respondsToSelector:@selector(toastPresenter)]) return;
+
     IGActionableConfirmationToastPresenter *toastPresenter = [rootVC toastPresenter];
     if (toastPresenter == nil) return;
 
     // View Model
     Class modelClass = NSClassFromString(@"IGActionableConfirmationToastViewModel");
     IGActionableConfirmationToastViewModel *model = [modelClass new];
-    
-    [model setValue:title forKey:@"text_annotatedTitleText"];
-    [model setValue:subtitle forKey:@"text_annotatedSubtitleText"];
+    if (model == nil) return;
+
+    [SCIUtils setValueForObj:model key:@"text_annotatedTitleText" value:title];
+    [SCIUtils setValueForObj:model key:@"text_annotatedSubtitleText" value:subtitle];
 
     // Show new toast, after clearing existing one
-    [toastPresenter hideAlert];
+    if ([toastPresenter respondsToSelector:@selector(hideAlert)]) {
+        [toastPresenter hideAlert];
+    }
+
+    if (![toastPresenter respondsToSelector:@selector(showAlertWithViewModel:isAnimated:animationDuration:presentationPriority:tapActionBlock:presentedHandler:dismissedHandler:)]) return;
+
     [toastPresenter showAlertWithViewModel:model isAnimated:true animationDuration:duration presentationPriority:0 tapActionBlock:nil presentedHandler:nil dismissedHandler:nil];
 }
 
