@@ -277,7 +277,7 @@
                 [SCISetting linkCellWithTitle:@"開発者" subtitle:@"SoCuul" imageUrl:@"https://i.imgur.com/c9CbytZ.png" url:@"https://socuul.dev"],
                 [SCISetting linkCellWithTitle:@"リポジトリを見る" subtitle:@"GitHub でソースコードを見る" imageUrl:@"https://i.imgur.com/BBUNzeP.png" url:@"https://github.com/SoCuul/SCInsta"]
             ],
-            @"footer": [NSString stringWithFormat:@"SCInsta %@\n\nInstagram v%@", SCIVersionString, [SCIUtils IGVersionString]]
+            @"footer": [NSString stringWithFormat:@"SCInsta %@ (ja-v3)\n\nInstagram v%@", SCIVersionString, [SCIUtils IGVersionString]]
         }
     ];
 }
