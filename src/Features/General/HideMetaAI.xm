@@ -463,7 +463,7 @@
 
         NSLog(@"[SCInsta] Hiding meta ai: reconfiguring search bar");
 
-        NSString *placeholder = [config valueForKey:@"placeholder"];
+        NSString *placeholder = [SCIUtils getValueForObj:config key:@"placeholder"];
 
         if ([placeholder containsString:@"Meta AI"]) {
 

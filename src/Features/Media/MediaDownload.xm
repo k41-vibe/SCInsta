@@ -9,6 +9,11 @@ static SCIDownloadDelegate *videoDownloadDelegate;
 // Pull the media object off a cell without assuming which accessor this build of
 // Instagram kept. Reading a property that has since been removed does not return nil, it
 // throws -- so every name is checked first.
+//
+// Matching a name is not enough on its own: the callers hand the result to
+// +getPhotoUrlForMedia: / +getVideoUrlForMedia:, which read -photo / -video off it, so
+// anything that cannot answer one of those would only move the crash one call down. Such a
+// candidate is skipped and the next name tried.
 static id SCIMediaFromCell(id cell) {
     static NSArray<NSString *> *names = nil;
     static dispatch_once_t onceToken;
@@ -21,10 +26,15 @@ static id SCIMediaFromCell(id cell) {
         if (![cell respondsToSelector:selector]) continue;
 
         id value = ((id (*)(id, SEL))objc_msgSend)(cell, selector);
-        if (value) {
-            NSLog(@"[SCInsta] media from -%@ on %@", name, NSStringFromClass([cell class]));
-            return value;
+        if (!value) continue;
+
+        if (![value respondsToSelector:@selector(photo)] && ![value respondsToSelector:@selector(video)]) {
+            NSLog(@"[SCInsta] -%@ on %@ gave a %@, not a media object", name, NSStringFromClass([cell class]), NSStringFromClass([value class]));
+            continue;
         }
+
+        NSLog(@"[SCInsta] media from -%@ on %@", name, NSStringFromClass([cell class]));
+        return value;
     }
 
     NSLog(@"[SCInsta] no media accessor on %@", NSStringFromClass([cell class]));

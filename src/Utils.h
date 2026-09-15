@@ -80,4 +80,11 @@
 + (id)getIvarForObj:(id)obj name:(const char *)name;
 + (void)setIvarForObj:(id)obj name:(const char *)name value:(id)value;
 
+// KVC
+// A key this build of Instagram no longer has does not come back nil from -valueForKey:,
+// it raises NSUndefinedKeyException. These check the key really exists before touching it
+// and hand back nil / do nothing when it does not.
++ (id)getValueForObj:(id)obj key:(NSString *)key;
++ (void)setValueForObj:(id)obj key:(NSString *)key value:(id)value;
+
 @end

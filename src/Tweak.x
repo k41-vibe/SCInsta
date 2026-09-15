@@ -564,10 +564,12 @@ shouldPersistLastBugReportId:(id)arg6
     for (id obj in originalObjs) {
         BOOL shouldHide = NO;
 
+        NSString *title = [SCIUtils getValueForObj:obj key:@"title"];
+
         // Meta AI
         if (
-            [[obj valueForKey:@"title"] isEqualToString:@"AI images"]
-            || [[obj valueForKey:@"title"] isEqualToString:@"Meta AI"]
+            [title isEqualToString:@"AI images"]
+            || [title isEqualToString:@"Meta AI"]
         ) {
             
             if ([SCIUtils getBoolPref:@"hide_meta_ai"]) {

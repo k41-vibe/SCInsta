@@ -316,5 +316,41 @@
     object_setIvarWithStrongDefault(obj, ivar, value);
 }
 
+// KVC
+// The ivar lookup covers the private "_foo" names, the selector check covers keys that are
+// really properties, and the @try is kept on top of both because KVC also reaches keys
+// through accessors a superclass declares and there is no cheap way to predict every one.
++ (BOOL)obj:(id)obj hasKey:(NSString *)key {
+    if (!obj || ![key length]) return NO;
+    if ([obj respondsToSelector:NSSelectorFromString(key)]) return YES;
+
+    Class cls = object_getClass(obj);
+    if (class_getInstanceVariable(cls, [key UTF8String]) != NULL) return YES;
+
+    return class_getInstanceVariable(cls, [[@"_" stringByAppendingString:key] UTF8String]) != NULL;
+}
++ (id)getValueForObj:(id)obj key:(NSString *)key {
+    if (![SCIUtils obj:obj hasKey:key]) return nil;
+
+    @try {
+        return [obj valueForKey:key];
+    }
+    @catch (NSException *exception) {
+        NSLog(@"[SCInsta] WARNING: %@\n\nFull object: %@", exception.reason, obj);
+
+        return nil;
+    }
+}
++ (void)setValueForObj:(id)obj key:(NSString *)key value:(id)value {
+    if (![SCIUtils obj:obj hasKey:key]) return;
+
+    @try {
+        [obj setValue:value forKey:key];
+    }
+    @catch (NSException *exception) {
+        NSLog(@"[SCInsta] WARNING: %@\n\nFull object: %@", exception.reason, obj);
+    }
+}
+
 
 @end

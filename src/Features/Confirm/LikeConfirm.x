@@ -116,7 +116,7 @@
 
     if (![SCIUtils getBoolPref:@"like_confirm"]) return;
 
-    UIButton *likeButton = [self valueForKey:@"likeButton"];
+    UIButton *likeButton = [SCIUtils getValueForObj:self key:@"likeButton"];
     if (!likeButton) return;
 
     // 129115 = L(12) I(9) K(11) E(5)

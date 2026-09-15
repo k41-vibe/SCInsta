@@ -3,23 +3,25 @@
 BOOL isSurfaceShown(IGMainAppSurfaceIntent *surface) {
     BOOL isShown = YES;
 
+    NSString *tab = [surface respondsToSelector:@selector(tabStringFromSurfaceIntent)] ? [surface tabStringFromSurfaceIntent] : nil;
+
     // Feed
-    if ([[surface tabStringFromSurfaceIntent] isEqualToString:@"FEED"] && [SCIUtils getBoolPref:@"hide_feed_tab"]) {
+    if ([tab isEqualToString:@"FEED"] && [SCIUtils getBoolPref:@"hide_feed_tab"]) {
         isShown = NO;
     }
     
     // Reels
-    else if ([[surface tabStringFromSurfaceIntent] isEqualToString:@"CLIPS"] && [SCIUtils getBoolPref:@"hide_reels_tab"]) {
+    else if ([tab isEqualToString:@"CLIPS"] && [SCIUtils getBoolPref:@"hide_reels_tab"]) {
         isShown = NO;
     }
 
     // Explore
-    else if ([[surface tabStringFromSurfaceIntent] isEqualToString:@"SEARCH"] && [SCIUtils getBoolPref:@"hide_explore_tab"]) {
+    else if ([tab isEqualToString:@"SEARCH"] && [SCIUtils getBoolPref:@"hide_explore_tab"]) {
         isShown = NO;
     }
 
     // Create
-    else if ([(NSNumber *)[surface valueForKey:@"_subtype"] unsignedIntegerValue] == 3 && [SCIUtils getBoolPref:@"hide_create_tab"]) {
+    else if ([(NSNumber *)[SCIUtils getValueForObj:surface key:@"_subtype"] unsignedIntegerValue] == 3 && [SCIUtils getBoolPref:@"hide_create_tab"]) {
         isShown = NO;
     }
 
