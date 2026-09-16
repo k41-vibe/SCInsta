@@ -59,11 +59,19 @@ static BOOL SCIHidesTestFlightNag(void) {
 %end
 
 %ctor {
-    // %init is not optional here. Writing %ctor by hand replaces the constructor Logos
-    // would have generated for this file, and that generated one is what registers the
-    // file's hooks -- leave it out and the hooks above are simply never installed. That
-    // is exactly what happened on the first attempt: the setting existed, the switch was
-    // on, and the nag still appeared every launch.
+    // The comment that stood here said %init was what had been missing, and that without
+    // it the hooks above were never installed. That is not how Logos works and it was not
+    // what fixed this. If %init appears nowhere in a file, Logos writes the constructor
+    // that registers the file's hooks itself (logos.pl:875), and if a hook group is left
+    // uninitialized it fails the build rather than going quiet (logos.pl:885) -- there is
+    // no silent version of that failure to have been hit.
+    //
+    // The commit that made the nag go away changed three things at once: it added %init,
+    // it stopped depending on the preference being written before it was read, and it
+    // added the viewWillAppear route below. The third is the one that can account for the
+    // symptom, since the sheet evidently did not arrive through presentViewController.
+    // Which it was has not been established, so it is left written down rather than
+    // guessed at again. %init is kept because it is harmless and explicit.
     %init;
 
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
