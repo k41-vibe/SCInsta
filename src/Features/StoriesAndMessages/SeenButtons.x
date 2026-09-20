@@ -98,19 +98,14 @@ static NSArray<NSString *> *SCICollectSeenCandidates(id target) {
         // Show the candidates so the right name can be picked without a debugger, and put them
         // on the pasteboard because the list does not fit on screen.
         NSArray *found = SCICollectSeenCandidates(nearestVC);
-        NSString *body = found.count ? [found componentsJoinedByString:@"
-"] : @"該当なし";
-        UIPasteboard.generalPasteboard.string = [NSString stringWithFormat:@"%@
-%@",
-                                                 NSStringFromClass([nearestVC class]), body];
+        NSString *cls = NSStringFromClass([nearestVC class]);
+        NSString *body = found.count ? [found componentsJoinedByString:@"\n"] : @"該当なし";
+        NSString *full = [NSString stringWithFormat:@"%@\n%@", cls, body];
+        UIPasteboard.generalPasteboard.string = full;
+
         UIAlertController *alert = [UIAlertController
             alertControllerWithTitle:@"既読を送る処理が見つかりません"
-                             message:[NSString stringWithFormat:@"%@
-
-%@
-
-(コピー済み)",
-                                      NSStringFromClass([nearestVC class]), body]
+                             message:[NSString stringWithFormat:@"%@\n\n%@\n\n(コピー済み)", cls, body]
                       preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
         [[SCIUtils nearestViewControllerForView:self] presentViewController:alert animated:YES completion:nil];
