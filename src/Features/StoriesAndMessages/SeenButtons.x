@@ -71,22 +71,63 @@ static SEL SCIFindSeenSelector(id target) {
 /// search is wider than the one above on purpose: a name may say "receipt", "markThread" or
 /// "viewed" without using either of the two words, and arguments are allowed because the real
 /// entry point may take a completion block.
-static NSArray<NSString *> *SCICollectSeenCandidates(id target) {
-    NSArray *needles = @[@"seen", @"read", @"receipt", @"viewed", @"markthread", @"markmessage"];
-    NSMutableArray *found = [NSMutableArray array];
-    for (Class cls = [target class]; cls && cls != [UIViewController class]; cls = class_getSuperclass(cls)) {
+static void SCICollectFrom(id obj, NSString *label, NSMutableArray *out, NSArray *needles) {
+    if (!obj) return;
+    for (Class cls = [obj class]; cls && cls != [NSObject class]; cls = class_getSuperclass(cls)) {
         unsigned int count = 0;
         Method *methods = class_copyMethodList(cls, &count);
         for (unsigned int i = 0; i < count; i++) {
             NSString *name = NSStringFromSelector(method_getName(methods[i]));
             NSString *lower = name.lowercaseString;
             for (NSString *needle in needles) {
-                if ([lower containsString:needle]) { [found addObject:name]; break; }
+                if ([lower containsString:needle]) {
+                    [out addObject:[NSString stringWithFormat:@"%@  %@", label, name]];
+                    break;
+                }
             }
         }
         free(methods);
     }
-    return [found sortedArrayUsingSelector:@selector(compare:)];
+}
+
+// 対象の周りを広く見る。既読を送る処理は、
+//   1. 対象そのもの
+//   2. 子のビューコントローラ(メッセージ一覧は子が持つ)
+//   3. 対象が持つオブジェクト(viewModel, thread, dataSource など)
+// のどれかにある。ivar をたどって、名前に seen / read などを含むメソッドを全部集める。
+static NSArray<NSString *> *SCICollectSeenCandidates(id target) {
+    NSArray *needles = @[@"seen", @"read", @"receipt", @"viewed", @"markthread", @"markmessage", @"lastseen"];
+    NSMutableArray *out = [NSMutableArray array];
+
+    SCICollectFrom(target, @"[self]", out, needles);
+
+    if ([target isKindOfClass:UIViewController.class]) {
+        NSInteger i = 0;
+        for (UIViewController *child in [(UIViewController *)target childViewControllers]) {
+            SCICollectFrom(child, [NSString stringWithFormat:@"[child %ld %@]", (long)i++,
+                                   NSStringFromClass([child class])], out, needles);
+        }
+    }
+
+    // ivar が指すオブジェクトも見る。値が取れないものは飛ばす
+    for (Class cls = [target class]; cls && cls != [UIViewController class]; cls = class_getSuperclass(cls)) {
+        unsigned int count = 0;
+        Ivar *ivars = class_copyIvarList(cls, &count);
+        for (unsigned int i = 0; i < count; i++) {
+            const char *type = ivar_getTypeEncoding(ivars[i]);
+            if (!type || type[0] != '@') continue;   // オブジェクトの ivar だけ
+            @try {
+                id value = object_getIvar(target, ivars[i]);
+                if (!value) continue;
+                NSString *iname = @(ivar_getName(ivars[i]));
+                SCICollectFrom(value, [NSString stringWithFormat:@"[%@ %@]", iname,
+                                       NSStringFromClass([value class])], out, needles);
+            } @catch (__unused NSException *e) {}
+        }
+        free(ivars);
+    }
+
+    return [out sortedArrayUsingSelector:@selector(compare:)];
 }
 
 %new - (void)seenButtonHandler:(UIBarButtonItem *)sender {
