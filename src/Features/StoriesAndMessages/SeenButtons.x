@@ -42,35 +42,41 @@
 
 // Messages seen button
 //
-// -markLastMessageAsSeen is gone from current Instagram builds. Guarding the call stopped the
-// crash but left the button doing nothing, which is not a fix. Upstream has this open as #252
-// and #268 and has not shipped since 2026-03.
+// -markLastMessageAsSeen still exists, but it moved off IGDirectThreadViewController onto the
+// message list, which is a child view controller (実機 2026-09-20 で確認):
 //
-// Rather than pin a new name that will move again, look for one at the moment of the tap: walk
-// the class and its superclasses for a no-argument method whose name says it marks something
-// seen or read. The list is logged so the exact name is recoverable when this breaks next.
-static SEL SCIFindSeenSelector(id target) {
-    static NSArray<NSString *> *wanted = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        // Most specific first: the old name, then names current builds are likely to use.
-        wanted = @[@"markLastMessageAsSeen", @"markThreadAsSeen", @"markAsSeen", @"markThreadAsRead",
-                   @"markAsRead", @"markVisibleMessagesAsSeen", @"sendSeenState", @"sendReadReceipt"];
-    });
-    for (NSString *name in wanted) {
-        SEL sel = NSSelectorFromString(name);
-        if ([target respondsToSelector:sel]) return sel;
+//   [child 1 IGDirectMessageListViewController]  markLastMessageAsSeen
+//   [_featureManager IGDirectThreadViewFeatureManager]  markLastMessageAsSeen
+//
+// Calling it on the controller itself threw, and guarding that call left the button doing
+// nothing. Look for the owner instead of assuming one: the controller, then its children, then
+// _featureManager. Whichever answers to the selector gets it.
+//
+// The list also carries -bypassSeenStateUpdate, which is how "don't send read receipts" is
+// implemented. It has to come off for the duration of the call, or the request is suppressed
+// on the way out and the button appears to work while changing nothing.
+static id SCIFindSeenTarget(UIViewController *controller) {
+    SEL sel = @selector(markLastMessageAsSeen);
+    if ([controller respondsToSelector:sel]) return controller;
+
+    for (UIViewController *child in controller.childViewControllers) {
+        if ([child respondsToSelector:sel]) return child;
     }
 
-    return NULL;
+    // _featureManager holds the same method and is reached through an ivar, not a property.
+    Ivar ivar = class_getInstanceVariable([controller class], "_featureManager");
+    if (ivar) {
+        @try {
+            id manager = object_getIvar(controller, ivar);
+            if ([manager respondsToSelector:sel]) return manager;
+        } @catch (__unused NSException *e) {}
+    }
+    return nil;
 }
 
-/// The names that looked plausible, for when none of the known ones are there.
+/// The names that looked plausible, for when the owner cannot be found.
 ///
-/// The log is not reachable from inside LiveContainer, so this is put on screen instead. The
-/// search is wider than the one above on purpose: a name may say "receipt", "markThread" or
-/// "viewed" without using either of the two words, and arguments are allowed because the real
-/// entry point may take a completion block.
+/// The log is not reachable from inside LiveContainer, so this is put on screen instead.
 static void SCICollectFrom(id obj, NSString *label, NSMutableArray *out, NSArray *needles) {
     if (!obj) return;
     for (Class cls = [obj class]; cls && cls != [NSObject class]; cls = class_getSuperclass(cls)) {
@@ -90,13 +96,8 @@ static void SCICollectFrom(id obj, NSString *label, NSMutableArray *out, NSArray
     }
 }
 
-// 対象の周りを広く見る。既読を送る処理は、
-//   1. 対象そのもの
-//   2. 子のビューコントローラ(メッセージ一覧は子が持つ)
-//   3. 対象が持つオブジェクト(viewModel, thread, dataSource など)
-// のどれかにある。ivar をたどって、名前に seen / read などを含むメソッドを全部集める。
 static NSArray<NSString *> *SCICollectSeenCandidates(id target) {
-    NSArray *needles = @[@"seen", @"read", @"receipt", @"viewed", @"markthread", @"markmessage", @"lastseen"];
+    NSArray *needles = @[@"seen", @"read", @"receipt", @"viewed", @"markthread", @"markmessage"];
     NSMutableArray *out = [NSMutableArray array];
 
     SCICollectFrom(target, @"[self]", out, needles);
@@ -109,18 +110,16 @@ static NSArray<NSString *> *SCICollectSeenCandidates(id target) {
         }
     }
 
-    // ivar が指すオブジェクトも見る。値が取れないものは飛ばす
     for (Class cls = [target class]; cls && cls != [UIViewController class]; cls = class_getSuperclass(cls)) {
         unsigned int count = 0;
         Ivar *ivars = class_copyIvarList(cls, &count);
         for (unsigned int i = 0; i < count; i++) {
             const char *type = ivar_getTypeEncoding(ivars[i]);
-            if (!type || type[0] != '@') continue;   // オブジェクトの ivar だけ
+            if (!type || type[0] != '@') continue;
             @try {
                 id value = object_getIvar(target, ivars[i]);
                 if (!value) continue;
-                NSString *iname = @(ivar_getName(ivars[i]));
-                SCICollectFrom(value, [NSString stringWithFormat:@"[%@ %@]", iname,
+                SCICollectFrom(value, [NSString stringWithFormat:@"[%@ %@]", @(ivar_getName(ivars[i])),
                                        NSStringFromClass([value class])], out, needles);
             } @catch (__unused NSException *e) {}
         }
@@ -134,29 +133,42 @@ static NSArray<NSString *> *SCICollectSeenCandidates(id target) {
     UIViewController *nearestVC = [SCIUtils nearestViewControllerForView:self];
     if (![nearestVC isKindOfClass:%c(IGDirectThreadViewController)]) return;
 
-    SEL sel = SCIFindSeenSelector(nearestVC);
-    if (!sel) {
-        // Show the candidates so the right name can be picked without a debugger, and put them
-        // on the pasteboard because the list does not fit on screen.
+    id target = SCIFindSeenTarget(nearestVC);
+    if (!target) {
         NSArray *found = SCICollectSeenCandidates(nearestVC);
         NSString *cls = NSStringFromClass([nearestVC class]);
         NSString *body = found.count ? [found componentsJoinedByString:@"\n"] : @"該当なし";
-        NSString *full = [NSString stringWithFormat:@"%@\n%@", cls, body];
-        UIPasteboard.generalPasteboard.string = full;
+        UIPasteboard.generalPasteboard.string = [NSString stringWithFormat:@"%@\n%@", cls, body];
 
         UIAlertController *alert = [UIAlertController
             alertControllerWithTitle:@"既読を送る処理が見つかりません"
                              message:[NSString stringWithFormat:@"%@\n\n%@\n\n(コピー済み)", cls, body]
                       preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-        [[SCIUtils nearestViewControllerForView:self] presentViewController:alert animated:YES completion:nil];
+        [nearestVC presentViewController:alert animated:YES completion:nil];
         return;
     }
 
-    ((void (*)(id, SEL))objc_msgSend)(nearestVC, sel);
-    [SCIUtils showToastForDuration:2.5 title:[NSString stringWithFormat:@"既読を送りました (%@)",
-                                              NSStringFromSelector(sel)]];
+    // Take the suppression off while the call goes out, then put it back the way it was.
+    SEL getter = @selector(bypassSeenStateUpdate);
+    SEL setter = @selector(setBypassSeenStateUpdate:);
+    BOOL bypassed = NO;
+    BOOL canToggle = [target respondsToSelector:getter] && [target respondsToSelector:setter];
+    if (canToggle) {
+        bypassed = ((BOOL (*)(id, SEL))objc_msgSend)(target, getter);
+        if (bypassed) ((void (*)(id, SEL, BOOL))objc_msgSend)(target, setter, NO);
+    }
+
+    ((void (*)(id, SEL))objc_msgSend)(target, @selector(markLastMessageAsSeen));
+
+    if (canToggle && bypassed) {
+        ((void (*)(id, SEL, BOOL))objc_msgSend)(target, setter, YES);
+    }
+
+    [SCIUtils showToastForDuration:2.5 title:@"既読を送りました"];
 }
+
+
 // DM visual messages viewed button
 %new - (void)dmVisualMsgsViewedButtonHandler:(UIBarButtonItem *)sender {
     if (dmVisualMsgsViewedButtonEnabled) {
