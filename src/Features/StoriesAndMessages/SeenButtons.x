@@ -1,6 +1,8 @@
 #import "../../InstagramHeaders.h"
 #import "../../Tweak.h"
 #import "../../Utils.h"
+#import <objc/runtime.h>
+#import <objc/message.h>
 
 // Seen buttons (in DMs)
 // - Enables no seen for messages
@@ -39,15 +41,59 @@
 }
 
 // Messages seen button
+//
+// -markLastMessageAsSeen is gone from current Instagram builds. Guarding the call stopped the
+// crash but left the button doing nothing, which is not a fix. Upstream has this open as #252
+// and #268 and has not shipped since 2026-03.
+//
+// Rather than pin a new name that will move again, look for one at the moment of the tap: walk
+// the class and its superclasses for a no-argument method whose name says it marks something
+// seen or read. The list is logged so the exact name is recoverable when this breaks next.
+static SEL SCIFindSeenSelector(id target) {
+    static NSArray<NSString *> *wanted = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        // Most specific first: the old name, then names current builds are likely to use.
+        wanted = @[@"markLastMessageAsSeen", @"markThreadAsSeen", @"markAsSeen", @"markThreadAsRead",
+                   @"markAsRead", @"markVisibleMessagesAsSeen", @"sendSeenState", @"sendReadReceipt"];
+    });
+    for (NSString *name in wanted) {
+        SEL sel = NSSelectorFromString(name);
+        if ([target respondsToSelector:sel]) return sel;
+    }
+
+    // Nothing known matched. Collect the candidates so the name can be picked up from the log.
+    NSMutableArray *found = [NSMutableArray array];
+    for (Class cls = [target class]; cls && cls != [UIViewController class]; cls = class_getSuperclass(cls)) {
+        unsigned int count = 0;
+        Method *methods = class_copyMethodList(cls, &count);
+        for (unsigned int i = 0; i < count; i++) {
+            NSString *name = NSStringFromSelector(method_getName(methods[i]));
+            if ([name containsString:@":"]) continue;   // takes arguments, not a plain action
+            if ([name rangeOfString:@"seen" options:NSCaseInsensitiveSearch].location == NSNotFound &&
+                [name rangeOfString:@"read" options:NSCaseInsensitiveSearch].location == NSNotFound) continue;
+            [found addObject:name];
+        }
+        free(methods);
+    }
+    NSLog(@"[SCInsta] seen: no known selector on %@. candidates: %@",
+          NSStringFromClass([target class]), found);
+    return NULL;
+}
+
 %new - (void)seenButtonHandler:(UIBarButtonItem *)sender {
     UIViewController *nearestVC = [SCIUtils nearestViewControllerForView:self];
-    // The class can still be there after an update that dropped this method, so the kind
-    // check alone is not enough - it crashed here once already.
-    if ([nearestVC isKindOfClass:%c(IGDirectThreadViewController)] && [nearestVC respondsToSelector:@selector(markLastMessageAsSeen)]) {
-        [(IGDirectThreadViewController *)nearestVC markLastMessageAsSeen];
+    if (![nearestVC isKindOfClass:%c(IGDirectThreadViewController)]) return;
 
-        [SCIUtils showToastForDuration:2.5 title:@"Marked messages as seen"];
+    SEL sel = SCIFindSeenSelector(nearestVC);
+    if (!sel) {
+        [SCIUtils showToastForDuration:3.5 title:@"既読を送る処理が見つかりません"];
+        return;
     }
+
+    ((void (*)(id, SEL))objc_msgSend)(nearestVC, sel);
+    [SCIUtils showToastForDuration:2.5 title:[NSString stringWithFormat:@"既読を送りました (%@)",
+                                              NSStringFromSelector(sel)]];
 }
 // DM visual messages viewed button
 %new - (void)dmVisualMsgsViewedButtonHandler:(UIBarButtonItem *)sender {
