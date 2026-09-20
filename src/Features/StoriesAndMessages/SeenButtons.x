@@ -62,23 +62,31 @@ static SEL SCIFindSeenSelector(id target) {
         if ([target respondsToSelector:sel]) return sel;
     }
 
-    // Nothing known matched. Collect the candidates so the name can be picked up from the log.
+    return NULL;
+}
+
+/// The names that looked plausible, for when none of the known ones are there.
+///
+/// The log is not reachable from inside LiveContainer, so this is put on screen instead. The
+/// search is wider than the one above on purpose: a name may say "receipt", "markThread" or
+/// "viewed" without using either of the two words, and arguments are allowed because the real
+/// entry point may take a completion block.
+static NSArray<NSString *> *SCICollectSeenCandidates(id target) {
+    NSArray *needles = @[@"seen", @"read", @"receipt", @"viewed", @"markthread", @"markmessage"];
     NSMutableArray *found = [NSMutableArray array];
     for (Class cls = [target class]; cls && cls != [UIViewController class]; cls = class_getSuperclass(cls)) {
         unsigned int count = 0;
         Method *methods = class_copyMethodList(cls, &count);
         for (unsigned int i = 0; i < count; i++) {
             NSString *name = NSStringFromSelector(method_getName(methods[i]));
-            if ([name containsString:@":"]) continue;   // takes arguments, not a plain action
-            if ([name rangeOfString:@"seen" options:NSCaseInsensitiveSearch].location == NSNotFound &&
-                [name rangeOfString:@"read" options:NSCaseInsensitiveSearch].location == NSNotFound) continue;
-            [found addObject:name];
+            NSString *lower = name.lowercaseString;
+            for (NSString *needle in needles) {
+                if ([lower containsString:needle]) { [found addObject:name]; break; }
+            }
         }
         free(methods);
     }
-    NSLog(@"[SCInsta] seen: no known selector on %@. candidates: %@",
-          NSStringFromClass([target class]), found);
-    return NULL;
+    return [found sortedArrayUsingSelector:@selector(compare:)];
 }
 
 %new - (void)seenButtonHandler:(UIBarButtonItem *)sender {
@@ -87,7 +95,25 @@ static SEL SCIFindSeenSelector(id target) {
 
     SEL sel = SCIFindSeenSelector(nearestVC);
     if (!sel) {
-        [SCIUtils showToastForDuration:3.5 title:@"既読を送る処理が見つかりません"];
+        // Show the candidates so the right name can be picked without a debugger, and put them
+        // on the pasteboard because the list does not fit on screen.
+        NSArray *found = SCICollectSeenCandidates(nearestVC);
+        NSString *body = found.count ? [found componentsJoinedByString:@"
+"] : @"該当なし";
+        UIPasteboard.generalPasteboard.string = [NSString stringWithFormat:@"%@
+%@",
+                                                 NSStringFromClass([nearestVC class]), body];
+        UIAlertController *alert = [UIAlertController
+            alertControllerWithTitle:@"既読を送る処理が見つかりません"
+                             message:[NSString stringWithFormat:@"%@
+
+%@
+
+(コピー済み)",
+                                      NSStringFromClass([nearestVC class]), body]
+                      preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+        [[SCIUtils nearestViewControllerForView:self] presentViewController:alert animated:YES completion:nil];
         return;
     }
 
